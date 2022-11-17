@@ -2,35 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curses.h>
+#include <unistd.h>
+
+#define LEFTEDGE    10
+#define RIGHTEDGE   30
+#define ROW         10
 
 int main() {
+    char message[] = "--->";
+    char blank[] = "    ";
+    int dir = +1;
+    int pos = LEFTEDGE;
+
     initscr();
     clear();
-    curs_set(0);
-    noecho();
-    keypad(stdscr,TRUE);
-    move(0,0);
-    addstr("Press any key...");
     while(1) {
-        int direction = getch();
-        move(0,0);
-        switch(direction) {
-            case KEY_UP:
-                addstr("You pressed the UP arrow");
-                break;
-            case KEY_DOWN:
-                addstr("You pressed the DOWN arrow");
-                break;
-            case KEY_LEFT:
-                addstr("You pressed the LEFT arrow");
-                break;
-            case KEY_RIGHT:
-                addstr("You pressed the RIGHT arrow");
-                break;
-            case 'q':
-                endwin();
-                return 0;
-        }
+        move(ROW,pos);
+        addstr(message);
+        move(LINES-1,COLS-1);
         refresh();
+        sleep(1);
+        move(ROW,pos);
+        addstr(blank);
+        pos += dir;
+        if(pos >= RIGHTEDGE)
+            dir = -1;
+        if(pos <= LEFTEDGE)
+            dir = +1;
     }
 }
