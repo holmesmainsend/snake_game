@@ -1,4 +1,4 @@
-//TODO: record screencast of gameplay 
+//TODO: record screencast of gameplay
 //TODO: add comments to program code
 
 #include <stdio.h>
@@ -28,6 +28,7 @@ int main() {
     wrefresh(win);
 
     // TODO: add game end if snake runs into itself/border or reverses direction
+    // TODO: make snake movement continuous based on last recorded arrow key input
     while(1) {
         move(y,x);
         addstr(snake);
