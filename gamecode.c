@@ -4,13 +4,10 @@
 #include <curses.h>
 #include <unistd.h>
 
-#define LEFTEDGE    10
-#define RIGHTEDGE   30
-
 int main() {
     char snake[] = "----->";
     char blank[] = "      ";
-    int y = LEFTEDGE;
+    int y = 10;
     int x = 10;
 
     initscr();
@@ -18,6 +15,13 @@ int main() {
     curs_set(0);
     noecho();
     keypad(stdscr,TRUE);
+
+    int height = 20;
+    int width = 80;
+    WINDOW * win = newwin(height, width, 0, 0);
+    refresh();
+    box(win, 0, 0);
+    wrefresh(win);
 
     while(1) {
         move(y,x);
