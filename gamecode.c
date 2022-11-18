@@ -4,14 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <curses.h>
+#include <ncurses.h>
 #include <unistd.h>
 
 int main() {
+    //WE may need to store snake location as an array, where each entry is a segment.
     char snake[] = "----->";
     char blank[] = "      ";
-    int y = 10;
-    int x = 10;
+    int y = 0;
+    int x = 0;
 
     initscr();
     clear();
@@ -34,8 +35,14 @@ int main() {
         addstr(snake);
         refresh();
         sleep(1);
-        move(y,x);
-        addstr(blank);
+        
+        //these lins are making the snake disapear
+        //move(y,x);
+        //addstr(blank);
+        
+        //I believe that we can use if(user input changes) then (run the switch code) 
+        //That way we can continually move the snake even when there is no input
+        //Also we can store the direction instead of updating x and y and increment the head of the snake by the direction
         int key = getch();
         switch(key) {
             case KEY_UP:
