@@ -8,8 +8,8 @@
 #define RIGHTEDGE   30
 
 int main() {
-    char snake[] = "--->";
-    char blank[] = "    ";
+    char snake[] = "----->";
+    char blank[] = "      ";
     int y = LEFTEDGE;
     int x = 10;
 
