@@ -6,28 +6,43 @@
 
 #define LEFTEDGE    10
 #define RIGHTEDGE   30
-#define ROW         10
 
 int main() {
-    char message[] = "--->";
+    char snake[] = "--->";
     char blank[] = "    ";
-    int dir = +1;
-    int pos = LEFTEDGE;
+    int y = LEFTEDGE;
+    int x = 10;
 
     initscr();
     clear();
+    curs_set(0);
+    noecho();
+    keypad(stdscr,TRUE);
+
     while(1) {
-        move(ROW,pos);
-        addstr(message);
-        move(LINES-1,COLS-1);
+        move(y,x);
+        addstr(snake);
         refresh();
         sleep(1);
-        move(ROW,pos);
+        move(y,x);
         addstr(blank);
-        pos += dir;
-        if(pos >= RIGHTEDGE)
-            dir = -1;
-        if(pos <= LEFTEDGE)
-            dir = +1;
+        int key = getch();
+        switch(key) {
+            case KEY_UP:
+                y -= 1;
+                break;
+            case KEY_DOWN:
+                y += 1;
+                break;
+            case KEY_LEFT:
+                x -= 1;
+                break;
+            case KEY_RIGHT:
+                x += 1;
+                break;
+            case 'q':
+                endwin();
+                return 0;
+        }
     }
 }
