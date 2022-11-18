@@ -1,3 +1,6 @@
+//TODO: record screencast of gameplay 
+//TODO: add comments to program code
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -16,6 +19,7 @@ int main() {
     noecho();
     keypad(stdscr,TRUE);
 
+    // TODO: must change snake pit border to cover all available current terminal space
     int height = 20;
     int width = 80;
     WINDOW * win = newwin(height, width, 0, 0);
@@ -23,6 +27,7 @@ int main() {
     box(win, 0, 0);
     wrefresh(win);
 
+    // TODO: add game end if snake runs into itself/border or reverses direction
     while(1) {
         move(y,x);
         addstr(snake);
