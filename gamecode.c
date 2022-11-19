@@ -8,8 +8,8 @@
 #include <unistd.h>
 
 int main() {
-    char snake[] = {"-", "-", "-", "-", "-", ">"};
-    char blank[] = {" ", " ", " ", " ", " ", " "};
+    char snake[] = "----->";
+    char blank[] = "      ";
     int y = 0;
     int x = 0;
 
