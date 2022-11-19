@@ -1,7 +1,7 @@
-//NOTE: current TODOs only for intermediate, not for complete final project
+// NOTE: current TODOs only for intermediate, not for complete final project
 
-//TODO: record screencast of gameplay
-//TODO: add comments to program code
+// TODO: record screencast of gameplay
+// TODO: add comments to program code
 
 #include <stdio.h>
 #include <stdlib.h>
