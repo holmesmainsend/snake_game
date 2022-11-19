@@ -1,3 +1,5 @@
+//NOTE: current TODOs only for intermediate, not for complete final project
+
 //TODO: record screencast of gameplay
 //TODO: add comments to program code
 
