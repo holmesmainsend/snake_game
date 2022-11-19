@@ -8,12 +8,14 @@
 #include <unistd.h>
 
 int main() {
+    // Explanation of this code added below
     char snake[999];
     char eraser[999];
     char snakeTemp[999];
     char eraserTemp[999];
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
+    
     int y = 0;
     int x = 0;
 
@@ -64,6 +66,14 @@ int main() {
                 endwin();
                 return 0;
         }
+        /*
+            As far as I could determine, C does not contain a simple way to add characters to the beginning
+            of an array (like the unshift() method in JavaScript). Therefore, the code below transfers the
+            current snake to a temporary placeholder, sets a "-" segment as the new snake array, and then
+            appends the rest of the former snake to this by copying it over from the snakeTemp. The same
+            process is repeated for the eraser of the old snake, except with a " " instead of a "-" char.
+            Currently, the rate of growth is one snake segment per key press.
+        */
         strcpy(snakeTemp, snake);
         strcpy(snake, "-");
         strncat(snake, snakeTemp, 999);
