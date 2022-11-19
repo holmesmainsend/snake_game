@@ -11,8 +11,7 @@ int main() {
     // Explanation of this code added below
     char snake[999];
     char eraser[999];
-    char snakeTemp[999];
-    char eraserTemp[999];
+    char temporary[999];
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
     
@@ -74,11 +73,11 @@ int main() {
             process is repeated for the eraser of the old snake, except with a " " instead of a "-" char.
             Currently, the rate of growth is one snake segment per key press.
         */
-        strcpy(snakeTemp, snake);
+        strcpy(temporary, snake);
         strcpy(snake, "-");
-        strncat(snake, snakeTemp, 999);
-        strcpy(eraserTemp, eraser);
+        strncat(snake, temporary, 999);
+        strcpy(temporary, eraser);
         strcpy(eraser, " ");
-        strncat(eraser, eraserTemp, 999);
+        strncat(eraser, temporary, 999);
     }
 }
