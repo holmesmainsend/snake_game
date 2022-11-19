@@ -10,6 +10,8 @@
 int main() {
     char snake[999];
     char eraser[999];
+    char snakeTemp[999];
+    char eraserTemp[999];
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
     int y = 0;
@@ -62,5 +64,11 @@ int main() {
                 endwin();
                 return 0;
         }
+        strcpy(snakeTemp, snake);
+        strcpy(snake, "-");
+        strncat(snake, snakeTemp, 999);
+        strcpy(eraserTemp, eraser);
+        strcpy(eraser, " ");
+        strncat(eraser, eraserTemp, 999);
     }
 }
