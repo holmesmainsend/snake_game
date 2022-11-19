@@ -8,8 +8,10 @@
 #include <unistd.h>
 
 int main() {
-    char snake[] = "----->";
-    char blank[] = "      ";
+    char snake[999];
+    char eraser[999];
+    strcpy(snake, "----->");
+    strcpy(eraser, "      ");
     int y = 0;
     int x = 0;
 
@@ -35,9 +37,9 @@ int main() {
         refresh();
         sleep(1);
         
-        //these lins are making the snake disapear
-        //move(y,x);
-        //addstr(blank);
+        // these lines are making the snake disappear
+        move(y,x);
+        addstr(eraser);
         
         //I believe that we can use if(user input changes) then (run the switch code) 
         //That way we can continually move the snake even when there is no input
