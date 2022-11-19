@@ -13,6 +13,7 @@ int main() {
     char eraser[9999];
     char temporary[9999];
 
+    // Adding initial snake and initial eraser
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
     
@@ -20,7 +21,7 @@ int main() {
     int y = 0;
     int x = 0;
 
-    // Initializing ncurses screen
+    // Initializing ncurses screen settings
     initscr();
     clear();
     curs_set(0);
