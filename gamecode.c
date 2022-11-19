@@ -8,9 +8,8 @@
 #include <unistd.h>
 
 int main() {
-    //WE may need to store snake location as an array, where each entry is a segment.
-    char snake[] = "----->";
-    char blank[] = "      ";
+    char snake[] = {"-", "-", "-", "-", "-", ">"};
+    char blank[] = {" ", " ", " ", " ", " ", " "};
     int y = 0;
     int x = 0;
 
