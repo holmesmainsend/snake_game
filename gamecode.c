@@ -24,6 +24,7 @@ int main() {
     noecho();
     keypad(stdscr,TRUE);
 
+    // Creating snake pit border for given terminal window
     WINDOW * win = newwin(LINES - 1, COLS - 1, 0, 0);
     refresh();
     box(win, 0, 0);
