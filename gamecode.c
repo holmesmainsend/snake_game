@@ -27,7 +27,7 @@ int main() {
     // TODO: must change snake pit border to cover all available current terminal space
     int height = 20;
     int width = 80;
-    WINDOW * win = newwin(height, width, (LINES - height) / 2, (LINES - height) / 2);
+    WINDOW * win = newwin(height, width, 0, 0);
     refresh();
     box(win, 0, 0);
     wrefresh(win);
