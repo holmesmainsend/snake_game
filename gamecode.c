@@ -16,10 +16,6 @@ int main() {
     // Adding initial snake and initial eraser
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
-    
-    // TODO: fix snake start position so that it doesn't erase border
-    int y = 0;
-    int x = 0;
 
     // Initializing ncurses screen settings
     initscr();
@@ -33,6 +29,10 @@ int main() {
     refresh();
     box(win, 0, 0);
     wrefresh(win);
+
+    // Setting snake starting position
+    int y = (LINES - 1) / 2;
+    int x = (COLS - 1) / 5;
 
     // TODO: add game end if snake runs into itself/border or reverses direction
     // TODO: make snake movement continuous based on last recorded arrow key input
