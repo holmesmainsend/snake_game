@@ -9,13 +9,14 @@
 
 int main() {
     // Explanation of these variables added below
-    char snake[999];
-    char eraser[999];
-    char temporary[999];
+    char snake[9999];
+    char eraser[9999];
+    char temporary[9999];
 
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
     
+    // TODO: fix snake start position so that it doesn't erase border
     int y = 0;
     int x = 0;
 
@@ -40,15 +41,17 @@ int main() {
         refresh();
         sleep(1);
         
-        // these lines are making the snake disappear
+        // These lines are making the snake disappear
         move(y,x);
         addstr(eraser);
         
         /*
-            I believe that we can use if(user input changes) then (run the switch code) 
+            I believe that we can use if(user input changes) then (run the switch code)
+
             That way we can continually move the snake even when there is no input
-            Also we can store the direction instead of updating x and y and increment 
-            the head of the snake by the direction
+
+            Also we can store the direction instead of updating x and y and increment the head of the 
+            snake by the direction
         */
         int key = getch();
         switch(key) {
@@ -79,9 +82,9 @@ int main() {
         */
         strcpy(temporary, snake);
         strcpy(snake, "-");
-        strncat(snake, temporary, 999);
+        strncat(snake, temporary, 9999);
         strcpy(temporary, eraser);
         strcpy(eraser, " ");
-        strncat(eraser, temporary, 999);
+        strncat(eraser, temporary, 9999);
     }
 }
