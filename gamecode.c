@@ -56,6 +56,7 @@ int main() {
             Also we can store the direction instead of updating x and y and increment the head of the 
             snake by the direction
         */
+       // POTENTIAL HELP TO IMPLEMENT YOUR SOLUTION: https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
         int key = getch();
         switch(key) {
             case KEY_UP:
