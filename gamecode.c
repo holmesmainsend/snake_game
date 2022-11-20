@@ -1,7 +1,20 @@
 // NOTE: current TODOs only for intermediate, not for complete final project
 
 // TODO: record screencast of gameplay
-// TODO: add comments to program code
+// TODO: add comments to finished program code
+// TODO: add kill conditions for collision with snake pit border or snake segment
+// TODO: make snake movement continuous based on last recorded arrow key input
+
+/*
+    I believe that we can use if(user input changes) then (run the switch code)
+
+    That way we can continually move the snake even when there is no input
+
+    Also we can store the direction instead of updating x and y and increment the head of the 
+    snake by the direction
+*/
+// POTENTIAL HELP TO IMPLEMENT YOUR SOLUTION: https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +28,7 @@ int main() {
     char eraser[9999];
     char temporary[9999];
 
-    // Adding initial snake and initial eraser
+    // Adding initial snake and initial eraser size
     strcpy(snake, "----->");
     strcpy(eraser, "      ");
 
@@ -36,8 +49,9 @@ int main() {
     int y = (LINES - 1) / 2;
     int x = (COLS - 1) / 5;
 
-    // TODO: add game end if snake runs into itself/border or reverses direction
-    // TODO: make snake movement continuous based on last recorded arrow key input
+    int prevKey = 0;
+
+    // Game loop
     while(1) {
         move(y,x);
         addstr(snake);
@@ -48,16 +62,19 @@ int main() {
         move(y,x);
         addstr(eraser);
         
-        /*
-            I believe that we can use if(user input changes) then (run the switch code)
-
-            That way we can continually move the snake even when there is no input
-
-            Also we can store the direction instead of updating x and y and increment the head of the 
-            snake by the direction
-        */
-       // POTENTIAL HELP TO IMPLEMENT YOUR SOLUTION: https://stackoverflow.com/questions/4025891/create-a-function-to-check-for-key-press-in-unix-using-ncurses
+        // Waiting for user input
         int key = getch();
+
+        // Checking if user reversed direction
+        if((prevKey == KEY_UP && key == KEY_DOWN) || 
+           (prevKey == KEY_DOWN && key == KEY_UP) ||
+           (prevKey == KEY_RIGHT && key == KEY_LEFT) ||
+           (prevKey == KEY_LEFT && key == KEY_RIGHT)) {
+            endwin();
+            return 0;
+        }
+
+        // Updating snake direction or exiting based on key input
         switch(key) {
             case KEY_UP:
                 y -= 1;
@@ -75,6 +92,10 @@ int main() {
                 endwin();
                 return 0;
         }
+
+        // Updating user's last input
+        prevKey = key;
+
         /*
             Snake growth code:
             As far as I could determine, C does not contain a simple way to add characters to the beginning
