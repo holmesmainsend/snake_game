@@ -3,11 +3,14 @@
 // TODO: record screencast of gameplay
 // TODO: add comments to finished program code
 // TODO: add kill conditions for collision with snake pit border or snake segment
+// TODO: implement growth
+// TODO: implement scoring and score display
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
+#include <time.h>
 #include <unistd.h>
 
 struct segment {
@@ -36,6 +39,7 @@ int main() {
 
     //init snake in snake[]
     for(int i = 0; i < snakeMaxSize; i++) {
+        //THe number here sets the initial length of the snake
         if(i < 5) {
             //first 5 elements get coordinate values
             snake[0 + i].x = ((COLS - 1) / 5) + (5 - i);
@@ -74,10 +78,18 @@ int main() {
     struct segment temp1;
     temp1.x = 0;
     temp1.y = 0;
+    //Trophy creation
+    struct segment trophy;
+    srand(time(NULL));
+    trophy.x = rand() % COLS;
+    trophy.y = rand() % LINES;
+    move(trophy.y, trophy.x);
+    addstr("%");
+    refresh();
 
     // Game loop
     while(1) {
-        usleep(300000); //# of microseconds to pause 100,000 = .1 seconds
+        usleep(200000); //# of microseconds to pause 100,000 = .1 seconds
 
         // Waiting for user input
         key = getch();
@@ -119,7 +131,25 @@ int main() {
                 return 0;
         }
 
-        //sleep(2);
+        //check collision
+        //collision with borders
+        if(snake[0].x == 0 || snake[0].x == COLS - 1 || snake[0].y == 0 || snake[0].y == LINES - 1) {
+            endwin();
+            clear();
+            return 0;
+        }
+        //collision with body
+        seg = 1;
+        while(snake[seg].x != 0 && snake[seg].y != 0) {
+            if(snake[0].x == snake[seg].x && snake[0].y == snake[seg].y) {
+                endwin();
+                clear();
+                return 0;
+            }
+            seg++;
+        }
+        seg = 0;
+        //check collision with trophies, and generate new trophy if needed
 
         //move snake
         //shift snake segments
@@ -139,6 +169,7 @@ int main() {
             snake[seg].y = temp[seg].y;
             seg++;
         }
+        //move head by dy and dx
         snake[0].x = snake[1].x + dx;
         snake[0].y = snake[1].y + dy;
         seg = 0;
