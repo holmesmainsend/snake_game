@@ -2,9 +2,10 @@
 
 // TODO: record screencast of gameplay
 // TODO: add comments to finished program code
-// TODO: add kill conditions for collision with snake pit border or snake segment
+// DONE: add kill conditions for collision with snake pit border or snake segment
 // TODO: implement growth
 // TODO: implement scoring and score display
+// TODO: implement increased speed when snake gets longer
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,9 +15,26 @@
 #include <unistd.h>
 
 struct segment {
-    int x;
-    int y;
+    int x, y;
 };
+
+struct trophy {
+    int x, y, value;
+};
+
+//Growing
+int growing = 0;
+
+void newTrophy(struct trophy *trophy) {
+    //logic here prevents the trophy from being printed on the border
+    (*trophy).x = (rand() % (COLS - 2)) + 1;
+    (*trophy).y = (rand() % (LINES - 2)) + 1;
+    //value between 1 and 9
+    (*trophy).value = (rand() % 9) + 1;
+    move((*trophy).y, (*trophy).x);
+    printw("%d", (*trophy).value);
+    refresh();
+}
 
 int main() {
     //array of segment positions on screen. index[0] is head of snake.
@@ -79,17 +97,18 @@ int main() {
     temp1.x = 0;
     temp1.y = 0;
     //Trophy creation
-    struct segment trophy;
+    struct trophy trophy;
+    struct trophy *pTrophy = &trophy;
     srand(time(NULL));
-    trophy.x = rand() % COLS;
-    trophy.y = rand() % LINES;
-    move(trophy.y, trophy.x);
-    addstr("%");
-    refresh();
+    newTrophy(pTrophy);
+    //Segment used for growth
+    struct segment growSeg;
+    growSeg.x = 0;
+    growSeg.y = 0;
 
     // Game loop
     while(1) {
-        usleep(200000); //# of microseconds to pause 100,000 = .1 seconds
+        usleep(250000); //# of microseconds to pause 100,000 = .1 seconds
 
         // Waiting for user input
         key = getch();
@@ -133,7 +152,7 @@ int main() {
 
         //check collision
         //collision with borders
-        if(snake[0].x == 0 || snake[0].x == COLS - 1 || snake[0].y == 0 || snake[0].y == LINES - 1) {
+        if(snake[0].x == 0 || snake[0].x == COLS - 1 || snake[0].y == 0 || snake[0].y == LINES - 2) {
             endwin();
             clear();
             return 0;
@@ -149,7 +168,6 @@ int main() {
             seg++;
         }
         seg = 0;
-        //check collision with trophies, and generate new trophy if needed
 
         //move snake
         //shift snake segments
@@ -158,10 +176,19 @@ int main() {
             temp[seg + 1].y = snake[seg].y;
             seg++;
         }
-        //erase last segment from terminal
-        move(snake[seg].y, snake[seg].x);
-        addstr(" ");
-        refresh();
+        //check if snake needs to grow
+        if(growing == 0) {
+            //erase last segment from terminal
+            move(snake[seg].y, snake[seg].x);
+            addstr(" ");
+            refresh();
+        }
+        else {
+            growing--;
+            snake[seg + 1].x = snake[seg].x;
+            snake[seg + 1].y = snake[seg].y;
+        }
+
         seg = 1;
         //transfer temp back into snake
         while(snake[seg].x != 0 && snake[seg].y != 0) {
@@ -181,5 +208,11 @@ int main() {
         move(snake[1].y, snake[1].x);
         addstr("#");
         refresh();
+
+        //collision with trophy
+        if(snake[0].x == trophy.x && snake[0].y == trophy.y) {
+            growing += trophy.value;
+            newTrophy(pTrophy);
+        }
     }
 }
