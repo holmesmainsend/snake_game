@@ -1,11 +1,11 @@
-// NOTE: current TODOs only for intermediate, not for complete final project
-
-// TODO: record screencast of gameplay
+// TODO: record screencast of final gameplay
 // TODO: add comments to finished program code
-// DONE: add kill conditions for collision with snake pit border or snake segment
-// TODO: implement growth
+// OPTIONAL: add colors and style features
+// TODO: add win condition (snake's length reaches half the perimeter of the border)
 // TODO: implement scoring and score display
 // TODO: implement increased speed when snake gets longer
+// TODO: fix growth after trophy eating
+
 
 #include <stdio.h>
 #include <stdlib.h>
