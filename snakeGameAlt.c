@@ -3,6 +3,8 @@
 // OPTIONAL: add colors and style features
 // TODO: add win condition (snake's length reaches half the perimeter of the border)
 // TODO: implement scoring and score display
+// TODO: add trophy expiration time (1 to 9 seconds randomly)
+// TODO: start snake with random direction
 // TODO: implement increased speed when snake gets longer
 // TODO: fix growth after trophy eating
 
