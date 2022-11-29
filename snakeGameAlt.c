@@ -108,7 +108,7 @@ int main() {
 
     // Game loop
     while(1) {
-        usleep(250000); //# of microseconds to pause 100,000 = .1 seconds
+        usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
 
         // Waiting for user input
         key = getch();
@@ -176,18 +176,11 @@ int main() {
             temp[seg + 1].y = snake[seg].y;
             seg++;
         }
-        //check if snake needs to grow
-        if(growing == 0) {
-            //erase last segment from terminal
-            move(snake[seg].y, snake[seg].x);
-            addstr(" ");
-            refresh();
-        }
-        else {
-            growing--;
-            snake[seg + 1].x = snake[seg].x;
-            snake[seg + 1].y = snake[seg].y;
-        }
+
+        //erase last segment from terminal
+        move(snake[seg].y, snake[seg].x);
+        addstr(" ");
+        refresh();
 
         seg = 1;
         //transfer temp back into snake
@@ -196,6 +189,15 @@ int main() {
             snake[seg].y = temp[seg].y;
             seg++;
         }
+        /*
+        //check for growth
+        if(growing != 0) {
+            growing--;
+            snake[seg + 1].x = snake[seg].x;
+            snake[seg + 1].y = snake[seg].y;
+            
+        }*/
+
         //move head by dy and dx
         snake[0].x = snake[1].x + dx;
         snake[0].y = snake[1].y + dy;
