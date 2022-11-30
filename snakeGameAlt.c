@@ -3,9 +3,9 @@
 
 // OPTIONAL: add colors and style features, win screen, etc.
 // OPTIONAL: MJS implement scoring and score display
+
 // TODO: MJS add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
 // TODO: account for trophy out of range of snake
-// TODO: SH implement increased speed when snake gets longer (correlates with current score)
 // TODO: MJS fix growth after trophy eating
 
 #include <stdio.h>
@@ -25,6 +25,9 @@ struct trophy {
 
 //First run variable
 bool initialRun = true;
+
+//Score variable
+int currentScore = 0;
 
 //Growing
 int growing = 0;
@@ -118,8 +121,9 @@ int main() {
 
     // Game loop
     while(1) {
-        //150000
-        usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
+        //150000 initial (# of microseconds to pause 100,000 = .1 seconds)
+        //The speed equation here will need to be tweaked in coordination with snake length win condition
+        usleep(150000 - (currentScore * 4000));
         timer = time(NULL);
 
         //Random initial vertical direction (or user input awaiting)
@@ -238,14 +242,15 @@ int main() {
             growing += trophy.value;
             newTrophy(pTrophy, snake[0].x, snake[0].y);
             prevTime = time(NULL);
+            currentScore += trophy.value;
         }
-        //if trophy wasnt eatten then check if trophy has expired
-        else if((timer - prevTime) >= trophy.dur) {
-            move(trophy.y, trophy.x);
-            addstr(" ");
-            newTrophy(pTrophy, snake[0].x, snake[0].y);
-            prevTime = time(NULL);
-        }
+        //if trophy wasn't eaten then check if trophy has expired
+        // else if((timer - prevTime) >= trophy.dur) {
+        //     move(trophy.y, trophy.x);
+        //     addstr(" ");
+        //     newTrophy(pTrophy, snake[0].x, snake[0].y);
+        //     prevTime = time(NULL);
+        // }
 
     }
 }
