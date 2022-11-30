@@ -2,10 +2,9 @@
 // TODO: add comments to finished program code
 
 // OPTIONAL: add colors and style features, win screen, etc.
-// OPTIONAL: implement scoring and score display MJS
+// OPTIONAL: MJS implement scoring and score display
 // TODO: MJS add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
 // TODO: account for trophy out of range of snake
-// TODO: SH start snake with random direction (through bool)
 // TODO: SH implement increased speed when snake gets longer (correlates with current score)
 // TODO: MJS fix growth after trophy eating
 
@@ -23,6 +22,9 @@ struct segment {
 struct trophy {
     int x, y, value, dur;
 };
+
+//First run variable
+bool initialRun = true;
 
 //Growing
 int growing = 0;
@@ -120,8 +122,17 @@ int main() {
         usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
         timer = time(NULL);
 
-        // Waiting for user input
-        key = getch();
+        //Random initial vertical direction (or user input awaiting)
+        if(initialRun == false) {
+            key = getch();
+        } else if(initialRun == true) {
+            if((rand() % 2) == true) {
+                key = KEY_UP;
+            } else {
+                key = KEY_DOWN;
+            }
+            initialRun = false;
+        }
 
         // Updating snake direction or exiting based on key input
         //doesn't change to opposite direction
