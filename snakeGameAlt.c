@@ -6,7 +6,7 @@
 // TODO: add win condition (snake's length reaches half the perimeter of the border)
 // TODO: account for trophy out of range of snake
 // TODO: start snake with random direction (through bool)
-// TODO: implement increased speed when snake gets longer
+// TODO: implement increased speed when snake gets longer (correlates with current score)
 // TODO: fix growth after trophy eating
 
 #include <stdio.h>
