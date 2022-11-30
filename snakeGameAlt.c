@@ -2,11 +2,11 @@
 // TODO: add comments to finished program code
 
 // OPTIONAL: add colors and style features, win screen, etc.
-// DONE: MJS implement scoring and score display
+// OPTIONAL: fix minor glitch where trophy spawns within tail segment
+
 // TODO: MJS add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
 // TODO: MJS account for trophy out of range of snake
 // TODO: SH implement increased speed when snake gets longer (correlates with current score)
-// DONE: MJS fix growth after trophy eating
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,13 +28,14 @@ bool initialRun = true;
 
 //Growing
 int growing = 0;
+
 //Scoring
 int highScore = 0;
 int score = 0;
 
-void newTrophy(struct trophy *trophy, int x, int y, bool eatten) {
+void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
     //increment score
-    if(eatten)
+    if(eaten)
         score += (*trophy).value;
     //value between 1 and 9
     (*trophy).value = (rand() % 9) + 1;
@@ -209,7 +210,6 @@ int main() {
         }
 
         seg = 1;
-        //WE HAD THE LOOP CHECKING SNAKE ARR NOT TEMP ARR!!!!!!!!!!!!!!!!!!!!!
         //transfer temp back into snake
         while(temp[seg].x != 0 && temp[seg].y != 0) {
             snake[seg].x = temp[seg].x;
@@ -239,7 +239,7 @@ int main() {
             printw("%d", score);
             refresh();
         }
-        //if trophy wasnt eatten then check if trophy has expired
+        //if trophy wasn't eaten then check if trophy has expired
         else if((timer - prevTime) >= trophy.dur) {
             move(trophy.y, trophy.x);
             addstr(" ");
