@@ -2,11 +2,12 @@
 // TODO: add comments to finished program code
 
 // OPTIONAL: add colors and style features, win screen, etc.
+// OPTIONAL: add high score display and update accordingly
 // OPTIONAL: fix minor glitch where trophy spawns within tail segment
 
-// TODO: MJS add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
-// TODO: MJS account for trophy out of range of snake
-// TODO: SH implement increased speed when snake gets longer (correlates with current score)
+// TODO: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
+// TODO: account for trophy out of range of snake
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -115,8 +116,8 @@ int main() {
 
     // Game loop
     while(1) {
-        //150000
-        usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
+        //150000 initially (# of microseconds to pause 100,000 = .1 seconds)
+        usleep(150000 - (score * 3000));
         timer = time(NULL);
 
         //Random initial vertical direction (or user input awaiting)
