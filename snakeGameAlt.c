@@ -2,11 +2,11 @@
 // TODO: add comments to finished program code
 
 // OPTIONAL: add colors and style features, win screen, etc.
-// OPTIONAL: MJS implement scoring and score display
-
+// DONE: MJS implement scoring and score display
 // TODO: MJS add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
-// TODO: account for trophy out of range of snake
-// TODO: MJS fix growth after trophy eating
+// TODO: MJS account for trophy out of range of snake
+// TODO: SH implement increased speed when snake gets longer (correlates with current score)
+// DONE: MJS fix growth after trophy eating
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,20 +26,23 @@ struct trophy {
 //First run variable
 bool initialRun = true;
 
-//Score variable
-int currentScore = 0;
-
 //Growing
 int growing = 0;
+//Scoring
+int highScore = 0;
+int score = 0;
 
-void newTrophy(struct trophy *trophy, int x, int y) {
+void newTrophy(struct trophy *trophy, int x, int y, bool eatten) {
+    //increment score
+    if(eatten)
+        score += (*trophy).value;
     //value between 1 and 9
     (*trophy).value = (rand() % 9) + 1;
     //set duration
     (*trophy).dur = 10 - (*trophy).value;
     //logic here prevents the trophy from being printed on the border 
-    (*trophy).x = (rand() % (COLS - 2)) + 1;
-    (*trophy).y = (rand() % (LINES - 2)) + 1;
+    (*trophy).x = (rand() % (COLS - 3)) + 1;
+    (*trophy).y = (rand() % (LINES - 3)) + 1;
     //print trophy
     move((*trophy).y, (*trophy).x);
     printw("%d", (*trophy).value);
@@ -64,6 +67,10 @@ int main() {
     box(win, 0, 0);                                         //draw box equal to size of window/screen
     wrefresh(win);                                          //refresh output
     nodelay(stdscr, TRUE);                                  //disables pause when prompting for input  
+    //Print score display
+    move(0,0);
+    addstr("Score:     ");
+    refresh();
 
     //init snake in snake[]
     for(int i = 0; i < snakeMaxSize; i++) {
@@ -80,22 +87,6 @@ int main() {
         }
     }
 
-    //draw initial snake
-    int seg = 0;
-    while(snake[seg].x != 0 && snake[seg].y != 0) {
-        move(snake[seg].y, snake[seg].x);
-        if(seg == 0) {
-            addstr("@");
-            refresh();
-        }
-        else {
-            addstr("#");
-            refresh();
-        }
-        seg++;
-    }
-    seg = 0;
-
     //values needed for Game Loop
     int key = 0;
     int dx = 1;
@@ -110,7 +101,7 @@ int main() {
     struct trophy trophy;
     struct trophy *pTrophy = &trophy;
     srand(time(NULL));
-    newTrophy(pTrophy, snake[0].x, snake[0].y);
+    newTrophy(pTrophy, snake[0].x, snake[0].y, 0);
     //Segment used for growth
     struct segment growSeg;
     growSeg.x = 0;
@@ -118,12 +109,13 @@ int main() {
     //time storage
     int timer = 0;
     int prevTime = time(NULL);
+    //init seg
+    int seg = 0;
 
     // Game loop
     while(1) {
-        //150000 initial (# of microseconds to pause 100,000 = .1 seconds)
-        //The speed equation here will need to be tweaked in coordination with snake length win condition
-        usleep(150000 - (currentScore * 4000));
+        //150000
+        usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
         timer = time(NULL);
 
         //Random initial vertical direction (or user input awaiting)
@@ -204,8 +196,8 @@ int main() {
 
         //growing 
         if(growing != 0) {
-            snake[seg + 1].x = snake[seg].x;
-            snake[seg + 1].y = snake[seg].y;
+            temp[seg + 1].x = snake[seg].x;
+            temp[seg + 1].y = snake[seg].y;
             growing--;
         }
         //if grow==0 then erase otherwise pause the eraser
@@ -217,8 +209,9 @@ int main() {
         }
 
         seg = 1;
+        //WE HAD THE LOOP CHECKING SNAKE ARR NOT TEMP ARR!!!!!!!!!!!!!!!!!!!!!
         //transfer temp back into snake
-        while(snake[seg].x != 0 && snake[seg].y != 0) {
+        while(temp[seg].x != 0 && temp[seg].y != 0) {
             snake[seg].x = temp[seg].x;
             snake[seg].y = temp[seg].y;
             seg++;
@@ -240,17 +233,18 @@ int main() {
         //collision with trophy
         if(snake[0].x == trophy.x && snake[0].y == trophy.y) {
             growing += trophy.value;
-            newTrophy(pTrophy, snake[0].x, snake[0].y);
+            newTrophy(pTrophy, snake[0].x, snake[0].y, 1);
             prevTime = time(NULL);
-            currentScore += trophy.value;
+            move(0, 7);
+            printw("%d", score);
+            refresh();
         }
-        //if trophy wasn't eaten then check if trophy has expired
-        // else if((timer - prevTime) >= trophy.dur) {
-        //     move(trophy.y, trophy.x);
-        //     addstr(" ");
-        //     newTrophy(pTrophy, snake[0].x, snake[0].y);
-        //     prevTime = time(NULL);
-        // }
-
+        //if trophy wasnt eatten then check if trophy has expired
+        else if((timer - prevTime) >= trophy.dur) {
+            move(trophy.y, trophy.x);
+            addstr(" ");
+            newTrophy(pTrophy, snake[0].x, snake[0].y, 0);
+            prevTime = time(NULL);
+        }
     }
 }
