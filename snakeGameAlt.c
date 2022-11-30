@@ -5,7 +5,7 @@
 // OPTIONAL: implement scoring and score display
 // TODO: add win condition (snake's length reaches half the perimeter of the border)
 // TODO: account for trophy out of range of snake
-// TODO: start snake with random direction
+// TODO: start snake with random direction (through bool)
 // TODO: implement increased speed when snake gets longer
 // TODO: fix growth after trophy eating
 
