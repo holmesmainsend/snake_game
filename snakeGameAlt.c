@@ -9,7 +9,6 @@
 // TODO: implement increased speed when snake gets longer
 // TODO: fix growth after trophy eating
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,18 +21,21 @@ struct segment {
 };
 
 struct trophy {
-    int x, y, value;
+    int x, y, value, dur;
 };
 
 //Growing
 int growing = 0;
 
-void newTrophy(struct trophy *trophy) {
-    //logic here prevents the trophy from being printed on the border
-    (*trophy).x = (rand() % (COLS - 2)) + 1;
-    (*trophy).y = (rand() % (LINES - 2)) + 1;
+void newTrophy(struct trophy *trophy, int x, int y) {
     //value between 1 and 9
     (*trophy).value = (rand() % 9) + 1;
+    //set duration
+    (*trophy).dur = 10 - (*trophy).value;
+    //logic here prevents the trophy from being printed on the border 
+    (*trophy).x = (rand() % (COLS - 2)) + 1;
+    (*trophy).y = (rand() % (LINES - 2)) + 1;
+    //print trophy
     move((*trophy).y, (*trophy).x);
     printw("%d", (*trophy).value);
     refresh();
@@ -103,15 +105,20 @@ int main() {
     struct trophy trophy;
     struct trophy *pTrophy = &trophy;
     srand(time(NULL));
-    newTrophy(pTrophy);
+    newTrophy(pTrophy, snake[0].x, snake[0].y);
     //Segment used for growth
     struct segment growSeg;
     growSeg.x = 0;
     growSeg.y = 0;
+    //time storage
+    int timer = 0;
+    int prevTime = time(NULL);
 
     // Game loop
     while(1) {
+        //150000
         usleep(150000); //# of microseconds to pause 100,000 = .1 seconds
+        timer = time(NULL);
 
         // Waiting for user input
         key = getch();
@@ -180,10 +187,19 @@ int main() {
             seg++;
         }
 
-        //erase last segment from terminal
-        move(snake[seg].y, snake[seg].x);
-        addstr(" ");
-        refresh();
+        //growing 
+        if(growing != 0) {
+            snake[seg + 1].x = snake[seg].x;
+            snake[seg + 1].y = snake[seg].y;
+            growing--;
+        }
+        //if grow==0 then erase otherwise pause the eraser
+        else {
+            //erase last segment from terminal
+            move(snake[seg].y, snake[seg].x);
+            addstr(" ");
+            refresh();
+        }
 
         seg = 1;
         //transfer temp back into snake
@@ -192,14 +208,6 @@ int main() {
             snake[seg].y = temp[seg].y;
             seg++;
         }
-        /*
-        //check for growth
-        if(growing != 0) {
-            growing--;
-            snake[seg + 1].x = snake[seg].x;
-            snake[seg + 1].y = snake[seg].y;
-            
-        }*/
 
         //move head by dy and dx
         snake[0].x = snake[1].x + dx;
@@ -217,7 +225,16 @@ int main() {
         //collision with trophy
         if(snake[0].x == trophy.x && snake[0].y == trophy.y) {
             growing += trophy.value;
-            newTrophy(pTrophy);
+            newTrophy(pTrophy, snake[0].x, snake[0].y);
+            prevTime = time(NULL);
         }
+        //if trophy wasnt eatten then check if trophy has expired
+        else if((timer - prevTime) >= trophy.dur) {
+            move(trophy.y, trophy.x);
+            addstr(" ");
+            newTrophy(pTrophy, snake[0].x, snake[0].y);
+            prevTime = time(NULL);
+        }
+
     }
 }
