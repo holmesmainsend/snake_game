@@ -5,7 +5,6 @@
 // OPTIONAL: add high score display and update accordingly
 // OPTIONAL: fix minor glitch where trophy spawns within tail segment
 
-// DONE: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
 // TODO: account for trophy out of range of snake
 
 
