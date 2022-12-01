@@ -5,7 +5,7 @@
 // OPTIONAL: add high score display and update accordingly
 // OPTIONAL: fix minor glitch where trophy spawns within tail segment
 
-// TODO: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
+// DONE: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
 // TODO: account for trophy out of range of snake
 
 
@@ -31,7 +31,6 @@ bool initialRun = true;
 int growing = 0;
 
 //Scoring
-int highScore = 0;
 int score = 0;
 
 void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
@@ -247,5 +246,34 @@ int main() {
             newTrophy(pTrophy, snake[0].x, snake[0].y, 0);
             prevTime = time(NULL);
         }
+
+        //Check for win condition
+        //Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window wize
+        if(score >= COLS + LINES) {
+            /*
+             ___ ___  _______  _______      ________  _______  _______  __ 
+            |   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |
+             \     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|
+              |___|  |_______||_______|    |________||_______||__|____||__|                                                                                                                                                                                                           
+            */
+            move((LINES / 2) - 2, (COLS / 2) - 32);
+            addstr(" ___ ___  _______  _______      ________  _______  _______  __ ");
+            refresh();
+            move((LINES / 2) - 1, (COLS / 2) - 32);
+            addstr("|   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |");
+            refresh();
+            move((LINES / 2) - 0, (COLS / 2) - 32);
+            addstr(" \\     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|");
+            refresh();
+            move((LINES / 2)  + 1, (COLS / 2) - 32);
+            addstr("  |___|  |_______||_______|    |________||_______||__|____||__|");
+            refresh();
+            break;
+        }
     }
+
+    sleep(5);
+    endwin();
+    clear();
+    return 0;
 }
