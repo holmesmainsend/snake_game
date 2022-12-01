@@ -50,6 +50,30 @@ void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
     refresh();
 }
 
+void youLose() {
+    /*
+     ___ ___  _______  _______      __     _______  _______  _______  __
+    |   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |
+     \     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|
+      |___|  |_______||_______|    |_____||_______||_______||_______||__|
+    */
+    move((LINES / 2) - 2, (COLS / 2) - 35);
+    addstr(" ___ ___  _______  _______      __     _______  _______  _______  __");
+    refresh();
+    move((LINES / 2) - 1, (COLS / 2) - 35);
+    addstr("|   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |");
+    refresh();
+    move((LINES / 2) - 0, (COLS / 2) - 35);
+    addstr(" \\     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|");
+    refresh();
+    move((LINES / 2) + 1, (COLS / 2) - 35);
+    addstr("  |___|  |_______||_______|    |_____||_______||_______||_______||__|");
+    refresh();
+    sleep(5);
+    endwin();
+    clear();
+}
+
 int main() {
     //array of segment positions on screen. index[0] is head of snake.
     int snakeMaxSize = 9999;
@@ -163,24 +187,22 @@ int main() {
                 //printw("RIGHT");
                 break;
             case 'q':
-                endwin();
-                clear();
+                youLose();
                 return 0;
+                break;
         }
 
         //check collision
         //collision with borders
         if(snake[0].x == 0 || snake[0].x == COLS - 1 || snake[0].y == 0 || snake[0].y == LINES - 2) {
-            endwin();
-            clear();
+            youLose();
             return 0;
         }
         //collision with body
         seg = 1;
         while(snake[seg].x != 0 && snake[seg].y != 0) {
             if(snake[0].x == snake[seg].x && snake[0].y == snake[seg].y) {
-                endwin();
-                clear();
+                youLose();
                 return 0;
             }
             seg++;
@@ -271,9 +293,4 @@ int main() {
             break;
         }
     }
-
-    sleep(5);
-    endwin();
-    clear();
-    return 0;
 }
