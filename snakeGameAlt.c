@@ -1,12 +1,10 @@
+// SUBMIT EVERYTHING MONDAY
+
 // TODO: record screencast demo of final gameplay
 // TODO: add comments to finished program code
 
-// OPTIONAL: add colors and style features, win screen, etc.
-// OPTIONAL: add high score display and update accordingly
-// OPTIONAL: fix minor glitch where trophy spawns within tail segment
-
-// DONE: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
-// DONE: account for trophy out of range of snake
+// OPTIONAL: add sounds
+// OPTIONAL: add start menu to choose color theme
 
 
 #include <stdio.h>
