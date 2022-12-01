@@ -5,7 +5,8 @@
 // OPTIONAL: add high score display and update accordingly
 // OPTIONAL: fix minor glitch where trophy spawns within tail segment
 
-// TODO: account for trophy out of range of snake
+// DONE: add win condition (snake's length reaches half the perimeter of the border): score is a certain value while growing = 0
+// DONE: account for trophy out of range of snake
 
 
 #include <stdio.h>
@@ -40,9 +41,13 @@ void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
     (*trophy).value = (rand() % 9) + 1;
     //set duration
     (*trophy).dur = 10 - (*trophy).value;
-    //logic here prevents the trophy from being printed on the border 
-    (*trophy).x = (rand() % (COLS - 3)) + 1;
-    (*trophy).y = (rand() % (LINES - 3)) + 1;
+    //sets position of new trophy within a set distance of snake, and inside the border
+    do {
+        (*trophy).x = ((rand() % 20) - 10) + x;
+        (*trophy).y = ((rand() % 20) - 10) + y;
+    }
+    while((*trophy).x >= COLS || (*trophy).x <= 0 || (*trophy).y >= LINES || (*trophy).y <= 0);
+
     //print trophy
     move((*trophy).y, (*trophy).x);
     printw("%d", (*trophy).value);
@@ -50,24 +55,31 @@ void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
 }
 
 void youLose() {
-    /*
-     ___ ___  _______  _______      __     _______  _______  _______  __
-    |   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |
-     \     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|
-      |___|  |_______||_______|    |_____||_______||_______||_______||__|
-    */
-    move((LINES / 2) - 2, (COLS / 2) - 35);
-    addstr(" ___ ___  _______  _______      __     _______  _______  _______  __");
-    refresh();
-    move((LINES / 2) - 1, (COLS / 2) - 35);
-    addstr("|   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |");
-    refresh();
-    move((LINES / 2) - 0, (COLS / 2) - 35);
-    addstr(" \\     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|");
-    refresh();
-    move((LINES / 2) + 1, (COLS / 2) - 35);
-    addstr("  |___|  |_______||_______|    |_____||_______||_______||_______||__|");
-    refresh();
+    if(COLS > 67 && LINES > 3) {
+        /*
+         ___ ___  _______  _______      __     _______  _______  _______  __
+        |   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |
+         \     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|
+          |___|  |_______||_______|    |_____||_______||_______||_______||__|
+        */
+        move((LINES / 2) - 2, (COLS / 2) - 35);
+        addstr(" ___ ___  _______  _______      __     _______  _______  _______  __");
+        refresh();
+        move((LINES / 2) - 1, (COLS / 2) - 35);
+        addstr("|   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |");
+        refresh();
+        move((LINES / 2) - 0, (COLS / 2) - 35);
+        addstr(" \\     / |   -   ||   |   |    |  |__ |   -   ||____   ||   ____||__|");
+        refresh();
+        move((LINES / 2) + 1, (COLS / 2) - 35);
+        addstr("  |___|  |_______||_______|    |_____||_______||_______||_______||__|");
+        refresh();
+    }
+    else {
+        move(LINES / 2, (COLS / 2) - 5);
+        addstr("YOU LOSE!");
+        refresh();
+    }
     sleep(5);
     endwin();
     clear();
@@ -155,7 +167,7 @@ int main() {
         }
 
         // Updating snake direction or exiting based on key input
-        //doesn't change to opposite direction
+        //doesn't change to opposite direction, instead of ending the game
         switch(key) {
             case KEY_UP:
                 if(dy != 1) {
@@ -271,25 +283,35 @@ int main() {
         //Check for win condition
         //Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window wize
         if(score >= COLS + LINES) {
-            /*
-             ___ ___  _______  _______      ________  _______  _______  __ 
-            |   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |
-             \     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|
-              |___|  |_______||_______|    |________||_______||__|____||__|                                                                                                                                                                                                           
-            */
-            move((LINES / 2) - 2, (COLS / 2) - 32);
-            addstr(" ___ ___  _______  _______      ________  _______  _______  __ ");
-            refresh();
-            move((LINES / 2) - 1, (COLS / 2) - 32);
-            addstr("|   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |");
-            refresh();
-            move((LINES / 2) - 0, (COLS / 2) - 32);
-            addstr(" \\     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|");
-            refresh();
-            move((LINES / 2)  + 1, (COLS / 2) - 32);
-            addstr("  |___|  |_______||_______|    |________||_______||__|____||__|");
-            refresh();
+            if(COLS > 67 && LINES > 3) {
+                /*
+                 ___ ___  _______  _______      ________  _______  _______  __ 
+                |   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |
+                 \     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|
+                  |___|  |_______||_______|    |________||_______||__|____||__|                                                                                                                                                                                                           
+                */
+                move((LINES / 2) - 2, (COLS / 2) - 32);
+                addstr(" ___ ___  _______  _______      ________  _______  _______  __ ");
+                refresh();
+                move((LINES / 2) - 1, (COLS / 2) - 32);
+                addstr("|   |   ||       ||   |   |    |  |  |  ||_     _||    |  ||  |");
+                refresh();
+                move((LINES / 2) - 0, (COLS / 2) - 32);
+                addstr(" \\     / |   -   ||   |   |    |  |  |  | _|   |_ |       ||__|");
+                refresh();
+                move((LINES / 2)  + 1, (COLS / 2) - 32);
+                addstr("  |___|  |_______||_______|    |________||_______||__|____||__|");
+                refresh();
+            }
+            else {
+                move(LINES / 2, (COLS / 2) - 4);
+                addstr("YOU WIN!");
+            }
+            sleep(5);
             break;
         }
     }
+    endwin();
+    clear();
+    return 0;
 }
