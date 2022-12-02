@@ -4,7 +4,6 @@
 // TODO: add comments to finished program code
 
 // OPTIONAL: add sounds
-// OPTIONAL: add start menu to choose color theme
 
 
 #include <stdio.h>
@@ -96,17 +95,44 @@ int main() {
     noecho();               //turn off input display
     keypad(stdscr,TRUE);    //toggle on keyboard input
     
-    // Color themes
+    // Color themes (1 = 49 in ASCII)
     start_color();
-    init_pair(1, COLOR_WHITE, COLOR_BLACK);     //default theme
-    init_pair(2, COLOR_BLACK, COLOR_WHITE);     //inverted
-    init_pair(3, COLOR_GREEN, COLOR_RED);       //holiday
-    init_pair(4, COLOR_RED, COLOR_YELLOW);      //condiments
-    init_pair(5, COLOR_BLACK, COLOR_YELLOW);    //electric
-    init_pair(6, COLOR_WHITE, COLOR_BLUE);      //seasnake
-    init_pair(7, COLOR_BLACK, COLOR_BLACK);     //impossible
+    init_pair(49, COLOR_WHITE, COLOR_BLACK);     //classic theme
+    init_pair(50, COLOR_BLACK, COLOR_WHITE);     //inverted
+    init_pair(51, COLOR_GREEN, COLOR_RED);       //holiday
+    init_pair(52, COLOR_RED, COLOR_YELLOW);      //condiments
+    init_pair(53, COLOR_BLACK, COLOR_YELLOW);    //electric
+    init_pair(54, COLOR_WHITE, COLOR_BLUE);      //seasnake
+    init_pair(55, COLOR_BLACK, COLOR_BLACK);     //impossible
 
-    attron(COLOR_PAIR(7));
+    int themeVal = 0;
+
+    // Theme menu with built-in input validation
+    while(themeVal < 49 || themeVal > 55) {
+        move((LINES / 2) - 2, (COLS / 2) - 32);
+        addstr("SELECT THEME:");
+        move((LINES / 2) - 1, (COLS / 2) - 32);
+        addstr("1 = CLASSIC");
+        move((LINES / 2), (COLS / 2) - 32);
+        addstr("2 = INVERTED");
+        move((LINES / 2) + 1, (COLS / 2) - 32);
+        addstr("3 = HOLIDAY");
+        move((LINES / 2) + 2, (COLS / 2) - 32);
+        addstr("4 = CONDIMENTS");
+        move((LINES / 2) + 3, (COLS / 2) - 32);
+        addstr("5 = ELECTRIC");
+        move((LINES / 2) + 4, (COLS / 2) - 32);
+        addstr("6 = SEASNAKE");
+        move((LINES / 2) + 5, (COLS / 2) - 32);
+        addstr("7 = IMPOSSIBLE");
+        refresh();
+        themeVal = getch();
+    }
+    
+    // Implementing theme based on user input
+    attron(A_BOLD);
+    attron(COLOR_PAIR(themeVal));
+    refresh();
 
     // Creating snake pit border for given terminal window
     WINDOW * win = newwin(LINES - 1, COLS - 1, 0, 0);       //creates window equal to size of screen
