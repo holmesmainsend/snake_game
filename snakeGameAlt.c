@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
+#include <curses.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -78,7 +79,7 @@ void youLose() {
         addstr("YOU LOSE!");
         refresh();
     }
-    sleep(5);
+    sleep(3);
     endwin();
     clear();
 }
@@ -305,7 +306,7 @@ int main() {
                 move(LINES / 2, (COLS / 2) - 4);
                 addstr("YOU WIN!");
             }
-            sleep(5);
+            sleep(3);
             break;
         }
     }
