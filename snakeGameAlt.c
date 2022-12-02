@@ -95,6 +95,18 @@ int main() {
     curs_set(0);            //make cursor invisible
     noecho();               //turn off input display
     keypad(stdscr,TRUE);    //toggle on keyboard input
+    
+    // Color themes
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);     //default theme
+    init_pair(2, COLOR_BLACK, COLOR_WHITE);     //inverted
+    init_pair(3, COLOR_GREEN, COLOR_RED);       //holiday
+    init_pair(4, COLOR_RED, COLOR_YELLOW);      //condiments
+    init_pair(5, COLOR_BLACK, COLOR_YELLOW);    //electric
+    init_pair(6, COLOR_WHITE, COLOR_BLUE);      //seasnake
+    init_pair(7, COLOR_BLACK, COLOR_BLACK);     //impossible
+
+    attron(COLOR_PAIR(7));
 
     // Creating snake pit border for given terminal window
     WINDOW * win = newwin(LINES - 1, COLS - 1, 0, 0);       //creates window equal to size of screen
