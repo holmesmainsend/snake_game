@@ -318,7 +318,7 @@ int main() {
         }
 
         //Check for win condition
-        //Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window wize
+        //Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window size
         if(score >= COLS + LINES) {
             if(COLS > 67 && LINES > 3) {
                 /*
