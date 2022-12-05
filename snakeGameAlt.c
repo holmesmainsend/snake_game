@@ -1,6 +1,5 @@
 // SUBMIT EVERYTHING MONDAY
 
-// TODO: record screencast demo of final gameplay
 // TODO: add comments to finished program code
 
 // OPTIONAL: add sounds
