@@ -61,7 +61,7 @@ void youLose() {
           |___|  |_______||_______|    |_____||_______||_______||_______||__|
         */
         move((LINES / 2) - 2, (COLS / 2) - 35);
-        addstr(" ___ ___  _______  _______      __     _______  _______  _______  __");
+        addstr(" ___ ___  _______  _______      __     _______  _______  _______  __ ");
         refresh();
         move((LINES / 2) - 1, (COLS / 2) - 35);
         addstr("|   |   ||       ||   |   |    |  |   |       ||   ____||   ____||  |");
@@ -109,21 +109,21 @@ int main() {
 
     // Theme menu with built-in input validation
     while(themeVal < 49 || themeVal > 55) {
-        move((LINES / 2) - 2, (COLS / 2) - 32);
+        move((LINES / 2) - 2, (COLS / 2) - 9);
         addstr("SELECT THEME:");
-        move((LINES / 2) - 1, (COLS / 2) - 32);
+        move((LINES / 2) - 1, (COLS / 2) - 9);
         addstr("1 = CLASSIC");
-        move((LINES / 2), (COLS / 2) - 32);
+        move((LINES / 2), (COLS / 2) - 9);
         addstr("2 = INVERTED");
-        move((LINES / 2) + 1, (COLS / 2) - 32);
+        move((LINES / 2) + 1, (COLS / 2) - 9);
         addstr("3 = HOLIDAY");
-        move((LINES / 2) + 2, (COLS / 2) - 32);
+        move((LINES / 2) + 2, (COLS / 2) - 9);
         addstr("4 = CONDIMENTS");
-        move((LINES / 2) + 3, (COLS / 2) - 32);
+        move((LINES / 2) + 3, (COLS / 2) - 9);
         addstr("5 = ELECTRIC");
-        move((LINES / 2) + 4, (COLS / 2) - 32);
+        move((LINES / 2) + 4, (COLS / 2) - 9);
         addstr("6 = SEASNAKE");
-        move((LINES / 2) + 5, (COLS / 2) - 32);
+        move((LINES / 2) + 5, (COLS / 2) - 9);
         addstr("7 = IMPOSSIBLE");
         refresh();
         themeVal = getch();
@@ -275,7 +275,9 @@ int main() {
         else {
             //erase last segment from terminal
             move(snake[seg].y, snake[seg].x);
+            attroff(COLOR_PAIR(themeVal));
             addstr(" ");
+            attron(COLOR_PAIR(themeVal));
             refresh();
         }
 
@@ -312,7 +314,9 @@ int main() {
         //if trophy wasn't eaten then check if trophy has expired
         else if((timer - prevTime) >= trophy.dur) {
             move(trophy.y, trophy.x);
+            attroff(COLOR_PAIR(themeVal));
             addstr(" ");
+            attron(COLOR_PAIR(themeVal));
             newTrophy(pTrophy, snake[0].x, snake[0].y, 0);
             prevTime = time(NULL);
         }
