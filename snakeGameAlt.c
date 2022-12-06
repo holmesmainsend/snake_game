@@ -1,10 +1,3 @@
-// SUBMIT EVERYTHING MONDAY
-
-// TODO: add comments to finished program code
-
-// OPTIONAL: add sounds
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
