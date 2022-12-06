@@ -13,6 +13,12 @@
 #include <time.h>
 #include <unistd.h>
 
+/*
+**Declare structs for project 
+**segment -> stores coordinates of each snake segment
+**trophy -> stores value, duration, and coordinates of the current trophy
+** Mike and Sean
+*/
 struct segment {
     int x, y;
 };
@@ -21,15 +27,23 @@ struct trophy {
     int x, y, value, dur;
 };
 
+/*
+**Global variables 
+**Used in multible functions 
+**Mike and Sean
+*/
 //First run variable
 bool initialRun = true;
-
 //Growing
 int growing = 0;
-
 //Scoring
 int score = 0;
 
+/*
+**Inputs: pointer to trophy struct, coordinates of snake head as x and y, and a boolean value to determine logic when the trophy is eaten
+**Purpose: change location of trophy when trophy expires, increment score when trophy is eaten, and generate new trophy in both cases.
+** Mike and Sean
+*/
 void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
     //increment score
     if(eaten)
@@ -51,6 +65,10 @@ void newTrophy(struct trophy *trophy, int x, int y, bool eaten) {
     refresh();
 }
 
+/*
+**Purpose: Print fail state message to screen
+** Mike
+*/
 void youLose() {
     if(COLS > 67 && LINES > 3) {
         /*
@@ -82,6 +100,10 @@ void youLose() {
     clear();
 }
 
+/*
+**Purpose: Initialize the game window and important game elements. Then run the game loop in a while loop. 
+** MIke and Sean
+*/
 int main() {
     //array of segment positions on screen. index[0] is head of snake.
     int snakeMaxSize = 9999;
@@ -95,6 +117,8 @@ int main() {
     keypad(stdscr,TRUE);    //toggle on keyboard input
     
     // Color themes (1 = 49 in ASCII)
+    // Sean
+    // Inits color combinations
     start_color();
     init_pair(49, COLOR_WHITE, COLOR_BLACK);     //classic theme
     init_pair(50, COLOR_BLACK, COLOR_WHITE);     //inverted
@@ -107,6 +131,8 @@ int main() {
     int themeVal = 0;
 
     // Theme menu with built-in input validation
+    // Sean
+    // Prints main menu to screen and waits for input from user to enter the desired theme
     while(themeVal < 49 || themeVal > 55) {
         move((LINES / 2) - 2, (COLS / 2) - 9);
         addstr("SELECT THEME:");
@@ -134,6 +160,7 @@ int main() {
     refresh();
 
     // Creating snake pit border for given terminal window
+    // Sean
     WINDOW * win = newwin(LINES - 1, COLS - 1, 0, 0);       //creates window equal to size of screen
     refresh();                                              //refresh output
     box(win, 0, 0);                                         //draw box equal to size of window/screen
@@ -144,7 +171,9 @@ int main() {
     addstr("Score:     ");
     refresh();
 
-    //init snake in snake[]
+    // init snake in snake[]
+    // Mike
+    // generates first 5 segments values and stores them in snake[]. coordinates (0,0) are used to represent NULL values.
     for(int i = 0; i < snakeMaxSize; i++) {
         //THe number here sets the initial length of the snake
         if(i < 5) {
@@ -158,8 +187,9 @@ int main() {
             snake[i].y = 0;
         }
     }
-
-    //values needed for Game Loop
+    
+    // Mike and Sean
+    // Below are all values needed for Game Loop
     int key = 0;
     int dx = 1;
     int dy = 0;
@@ -185,12 +215,16 @@ int main() {
     int seg = 0;
 
     // Game loop
+    // Mike and Sean
     while(1) {
-        //150000 initially (# of microseconds to pause 100,000 = .1 seconds)
+        // Mike and Sean 
+        // pauses game loop after every frame for an amount of time proportional to the length of the current snake
+        // 150000 initially (# of microseconds to pause 100,000 = .1 seconds)
         usleep(150000 - (score * 3000));
         timer = time(NULL);
 
-        //Random initial vertical direction (or user input awaiting)
+        // Random initial vertical direction (or user input awaiting)
+        // Sean
         if(initialRun == false) {
             key = getch();
         } else if(initialRun == true) {
@@ -203,7 +237,8 @@ int main() {
         }
 
         // Updating snake direction or exiting based on key input
-        //doesn't change to opposite direction, instead of ending the game
+        // Mike and Sean
+        // **doesn't change to opposite direction, instead of ending the game**
         switch(key) {
             case KEY_UP:
                 if(dy != 1) {
@@ -239,13 +274,16 @@ int main() {
                 break;
         }
 
-        //check collision
-        //collision with borders
+        // check collision
+        // Mike 
+        // collision with borders. Only the head needs to be checked. The head's location is checked to be within the current window's max coordinates
         if(snake[0].x == 0 || snake[0].x == COLS - 1 || snake[0].y == 0 || snake[0].y == LINES - 2) {
             youLose();
             return 0;
         }
-        //collision with body
+        // collision with body
+        // Mike
+        // A while loop is used to check if the head of the current snake is located on the same location as any of its body segments
         seg = 1;
         while(snake[seg].x != 0 && snake[seg].y != 0) {
             if(snake[0].x == snake[seg].x && snake[0].y == snake[seg].y) {
@@ -256,21 +294,22 @@ int main() {
         }
         seg = 0;
 
-        //move snake
-        //shift snake segments
+        // move and grow snake
+        // Mike and Sean
+        // temp[] is used to store snake segment values and shift all values to the next index. snake[0] is the head of the snake
+        // shift snake segments
         while(snake[seg + 1].x != 0 && snake[seg + 1].y != 0) {
             temp[seg + 1].x = snake[seg].x;
             temp[seg + 1].y = snake[seg].y;
             seg++;
         }
-
-        //growing 
+        //growing. This grows the snake by one segment in snake[]
         if(growing != 0) {
             temp[seg + 1].x = snake[seg].x;
             temp[seg + 1].y = snake[seg].y;
             growing--;
         }
-        //if grow==0 then erase otherwise pause the eraser
+        //if grow==0 then erase otherwise pause the eraser. This grows the snake by one segment on screen
         else {
             //erase last segment from terminal
             move(snake[seg].y, snake[seg].x);
@@ -279,7 +318,6 @@ int main() {
             attron(COLOR_PAIR(themeVal));
             refresh();
         }
-
         seg = 1;
         //transfer temp back into snake
         while(temp[seg].x != 0 && temp[seg].y != 0) {
@@ -287,13 +325,13 @@ int main() {
             snake[seg].y = temp[seg].y;
             seg++;
         }
-
-        //move head by dy and dx
+        //move head by dy and dx. 
         snake[0].x = snake[1].x + dx;
         snake[0].y = snake[1].y + dy;
         seg = 0;
 
-        //reprint head, and replace previous head with "#"
+        // reprint head, and replace previous head with "#"
+        // Updates the snake on screen to show the old head position as a body segment
         move(snake[0].y, snake[0].x);
         addstr("@");
         refresh();
@@ -301,7 +339,9 @@ int main() {
         addstr("#");
         refresh();
 
-        //collision with trophy
+        // collision with trophy
+        // Mike and Sean
+        // checks if head coordinates are on a trophy and calls newTrophy() with eaten = true.
         if(snake[0].x == trophy.x && snake[0].y == trophy.y) {
             growing += trophy.value;
             newTrophy(pTrophy, snake[0].x, snake[0].y, 1);
@@ -310,7 +350,9 @@ int main() {
             printw("%d", score);
             refresh();
         }
-        //if trophy wasn't eaten then check if trophy has expired
+        // if trophy wasn't eaten then check if trophy has expired
+        // Mike and Sean
+        // if timer expires then calls newTrophy() with eaten = false.
         else if((timer - prevTime) >= trophy.dur) {
             move(trophy.y, trophy.x);
             attroff(COLOR_PAIR(themeVal));
@@ -320,8 +362,10 @@ int main() {
             prevTime = time(NULL);
         }
 
-        //Check for win condition
-        //Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window size
+        // Check for win condition
+        // Mike
+        // Displays message when win condition is met.
+        // Winning score is equal to half the perimeter's length. I think this will be way too large no matter the window size
         if(score >= COLS + LINES) {
             if(COLS > 67 && LINES > 3) {
                 /*
